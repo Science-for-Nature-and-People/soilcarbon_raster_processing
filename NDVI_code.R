@@ -70,6 +70,8 @@ med_raster <- subs(range_crop_proj, med_NDVI_df, by=1, which=2, subsWithNA = TRU
 
 ratio_raster <- NDVI_proj/med_raster # Values less than one mean that the NDVI value at that cell is less than the median for that RMZ type
 
+
+
 #### OLD CODE
 
 #counties <- st_read("/home/shares/soilcarbon/NDVI_grassland/Raster_Grasslands", layer = "CA_Counties_Tiger2016")
