@@ -29,13 +29,13 @@ NDVI_proj <- projectRaster(NDVI, range_proj, method = "ngb", alignOnly = FALSE) 
 
 ## Creating the raster of median values
 
-med_NDVI <- zonal(NDVI_proj, range_proj, 'median', na.rm = TRUE) # This creates a matrix of median values for each RMZ
-med_NDVI_df <- as.data.frame(med_NDVI) # Converts into dataframe, col 1 shows RMZ value (1-6), col 2 shows corresponding median value
-med_raster <- subs(range_proj, med_NDVI_df, by=1, which=2, subsWithNA = TRUE) # Uses dataframe to reclassify raster (replace values in column 1 with matching values in column 2)
+mean_NDVI <- zonal(NDVI_proj, range_proj, 'mean', na.rm = TRUE) # This creates a matrix of mean values for each RMZ
+mean_NDVI_df <- as.data.frame(mean_NDVI) # Converts into dataframe, col 1 shows RMZ value (1-6), col 2 shows corresponding mean value
+mean_raster <- subs(range_proj, mean_NDVI_df, by=1, which=2, subsWithNA = TRUE) # Uses dataframe to reclassify raster (replace values in column 1 with matching values in column 2)
 
 ## Finding the ratio raster (NDVI/median; only shows cells that fall within an RMZ)
 
-ratio_raster <- NDVI_proj/med_raster # Values less than one mean that the NDVI value at that cell is less than the median for that RMZ type
+ratio_raster <- NDVI_proj/mean_raster # Values less than one mean that the NDVI value at that cell is less than the average for that RMZ type
 
 ## Write final raster to file
 
