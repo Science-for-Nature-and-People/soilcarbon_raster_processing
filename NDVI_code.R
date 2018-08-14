@@ -25,21 +25,24 @@ proj <- projectExtent(rangelands, crs = newproj)  # Set a new reprojection (blan
 range_proj <- projectRaster(rangelands, proj, method= "ngb", alignOnly = FALSE) # Apply new projection to rangelands data
 NDVI_proj <- projectRaster(NDVI, range_proj, method = "ngb", alignOnly = FALSE) # Project, align, and crop the NDVI layer to the projection
 
+writeRaster(range_proj, filename = "range_proj", format = "GTiff", overwrite = TRUE, datatype = "FLT4S")
+writeRaster(NDVI_proj, filename = "NDVI_proj", format = "GTiff", overwrite = TRUE, datatype = "FLT4S")
+
 ## Analyses
 
 ## Creating the raster of median values
 
-mean_NDVI <- zonal(NDVI_proj, range_proj, 'mean', na.rm = TRUE) # This creates a matrix of mean values for each RMZ
+mean_NDVI <- zonal(NDVI_proj, range_proj, 'mean', na.rm = TRUE) # This creates a matrix of mean values for each RMZ (median only works for smaller rasters)
 mean_NDVI_df <- as.data.frame(mean_NDVI) # Converts into dataframe, col 1 shows RMZ value (1-6), col 2 shows corresponding mean value
 mean_raster <- subs(range_proj, mean_NDVI_df, by=1, which=2, subsWithNA = TRUE) # Uses dataframe to reclassify raster (replace values in column 1 with matching values in column 2)
 
-## Finding the ratio raster (NDVI/median; only shows cells that fall within an RMZ)
+## Finding the ratio raster (NDVI/mean; only shows cells that fall within an RMZ)
 
 ratio_raster <- NDVI_proj/mean_raster # Values less than one mean that the NDVI value at that cell is less than the average for that RMZ type
 
 ## Write final raster to file
 
-writeRaster(ratio_raster, filename = "RMZ_NDVI_Median_Ratio", format = "GTiff", overwrite = TRUE, datatype = "FLT4S")
+writeRaster(ratio_raster, filename = "RMZ_NDVI_Mean_Ratio", format = "GTiff", overwrite = TRUE, datatype = "FLT4S")
 
 
 
@@ -64,19 +67,19 @@ writeRaster(ratio_raster, filename = "RMZ_NDVI_Median_Ratio", format = "GTiff", 
 # 
 # proj <- projectExtent(range_crop, crs = newproj)  # Reproject the RMZ file
 # range_crop_proj <- projectRaster(range_crop, proj, method= "ngb", alignOnly = FALSE)
-# NDVI_proj <- projectRaster(NDVI, range_crop_proj, method = "ngb", alignOnly = FALSE) #Project, align, and crop the NDVI layer to RMZ layer
+# NDVI_crop_proj <- projectRaster(NDVI, range_crop_proj, method = "ngb", alignOnly = FALSE) #Project, align, and crop the NDVI layer to RMZ layer
 # 
 # ## Analyses
 # 
 # ## Creating the raster of median values
 # 
-# med_NDVI <- zonal(NDVI_proj, range_crop_proj, 'median', na.rm = TRUE) # This creates a matrix of median values for each RMZ
+# med_NDVI <- zonal(NDVI_crop_proj, range_crop_proj, 'mean', na.rm = TRUE) # This creates a matrix of median values for each RMZ
 # med_NDVI_df <- as.data.frame(med_NDVI) # Converts into dataframe
 # med_raster <- subs(range_crop_proj, med_NDVI_df, by=1, which=2, subsWithNA = TRUE) # Uses dataframe to reclassify raster
 # 
 # ## Finding the ratio raster (NDVI/median; only shows cells that fall within an RMZ)
 # 
-# ratio_raster <- NDVI_proj/med_raster # Values less than one mean that the NDVI value at that cell is less than the median for that RMZ type
+# ratio_raster <- NDVI_crop_proj/med_raster # Values less than one mean that the NDVI value at that cell is less than the median for that RMZ type
 # 
 # ## Write final raster to file
 # 
