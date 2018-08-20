@@ -7,7 +7,7 @@ library(rgeos)
 
 ##### CONSTANTS ##### 
 
-# setwd("/home/csparks/soilcarbon_raster_processing")
+setwd("/home/shares/soilcarbon/soilc-california/rangeland-production/raster_processing")
 
 ## Inputs path and file names
 
@@ -15,7 +15,7 @@ path_input <- "/home/shares/soilcarbon"
 
 ca_ndvi_filename <- "/NDVI_grassland/Raster_Grasslands/CA_Landsat8_maxNDVI_20161101_20170701.tif"
 rangeland_filename <- "/NDVI_grassland/Raster_Grasslands/RMZ/RMZ_crop.tif" # A cropped version to use to test script
-# rangeland_filename <- "/soilc-california/rangeland-production/data/RMZ/RMZ.tif" # Use for full CA dataset (time consuming)
+#rangeland_filename <- "/soilc-california/rangeland-production/data/RMZ/RMZ.tif" # Use for full CA dataset (time consuming)
 
 ca_ndvi <- file.path(path_input, ca_ndvi_filename)
 rangeland_in <- file.path(path_input, rangeland_filename)  
