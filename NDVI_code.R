@@ -3,11 +3,13 @@ library(sf)
 library(sp)
 library(tidyverse)
 library(rgeos)
+library(rgdal)
 
 
 ##### CONSTANTS ##### 
 
-setwd("/home/shares/soilcarbon/soilc-california/rangeland-production/raster_processing")
+setwd("/home/csparks/soilc-ca-rangelands/rangeland-production/raster_processing")
+#dir.create('/home/csparks/soilc-ca-rangelands/rangeland-production/raster_processing')
 
 ## Inputs path and file names
 
@@ -15,10 +17,14 @@ path_input <- "/home/shares/soilcarbon"
 
 ca_ndvi_filename <- "/NDVI_grassland/Raster_Grasslands/CA_Landsat8_maxNDVI_20161101_20170701.tif"
 rangeland_filename <- "/NDVI_grassland/Raster_Grasslands/RMZ/RMZ_crop.tif" # A cropped version to use to test script
-#rangeland_filename <- "/soilc-california/rangeland-production/data/RMZ/RMZ.tif" # Use for full CA dataset (time consuming)
+# rangeland_filename <- "/soilc-california/rangeland-production/data/RMZ/RMZ.tif" # Use for full CA dataset (time consuming)
+
+vegetation_filename <- "NDVI_grassland/Raster_Grasslands/fveg15_1.gdb"
 
 ca_ndvi <- file.path(path_input, ca_ndvi_filename)
 rangeland_in <- file.path(path_input, rangeland_filename)  
+
+vegetation_data <-file.path(path_input, vegetation_filename)
 
 ## Define the projection to use (ESPG 3310: NAD 83 California Albers)
 
@@ -35,6 +41,13 @@ output_name <- "RMZ_NDVI_Mean_Ratio"
 
 NDVI <- raster(ca_ndvi)
 rangelands <- raster(rangeland_in)
+
+#vegetation <- raster(vegetation_data)
+
+
+
+#subset(ogrDrivers(), grepl("GDB", name))
+#ogrListLayers("/home/shares/soilcarbon/NDVI_grassland/Raster_Grasslands/fveg15_1.gdb")
 
 ## Reproject and resample data
 
